@@ -1,5 +1,5 @@
 ---
-      - name: Install dependencias
+      - name: Install dependencies
         ansible.builtin.apt:
           pkg: 
           - apache2

@@ -1,5 +1,5 @@
 ---
-    - name: Install dependencias
+    - name: Install dependencies
       ansible.builtin.apt:
         pkg: 
         - mysql-server
@@ -25,7 +25,7 @@
         - "127.0.0.1"
         - "{{ wp_host }}"
       become: yes
-    - name: Configuração do banco de dados
+    - name: Database configuration
       ansible.builtin.replace:
         path: /etc/mysql/mysql.conf.d/mysqld.cnf
         regexp: "127.0.0.1"
