@@ -1,0 +1,5 @@
+[wordpress]
+192.168.10.232 ansible_user=michael ansible_ssh_private_key_file='/home/michael/ansible/keytestewordpress'
+
+[mysql]
+192.168.10.233 ansible_user=michael ansible_ssh_private_key_file='/home/michael/ansible/keytestedb'

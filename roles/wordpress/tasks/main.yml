@@ -1,0 +1,38 @@
+---
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /srv/www
+        state: directory
+        owner: www-data
+        group: www-data
+      become: yes
+    - name: Unarchive a file that needs to be downloaded (added in 2.0)
+      ansible.builtin.unarchive:
+        src: https://wordpress.org/latest.tar.gz
+        dest: /srv/www
+        remote_src: yes
+      become: yes
+    - name: Copy file with owner and permissions
+      ansible.builtin.template:
+        src: templates/wordpress.conf.j2
+        dest: /etc/apache2/sites-available/000-default.conf
+      become: yes
+      notify:
+        - restart apache
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: "{{ wp_dir }}/wp-config-sample.php"
+        dest: "{{ wp_dir }}/wp-config.php"
+        remote_src: yes
+      become: yes 
+    - name: Replace old hostname with new hostname in wp-config.php
+      ansible.builtin.replace:
+        path: "{{ wp_dir }}/wp-config.php"
+        regexp: "{{ item.regexp }}"
+        replace: "{{ item.replace }}"
+      with_items:
+        - { regexp: "database_name_here", replace: "{{ wp_db_name }}" }
+        - { regexp: "username_here", replace: "{{ wp_db_user }}" }
+        - { regexp: "password_here", replace: "{{ wp_db_password }}" }
+        - { regexp: "localhost", replace: "{{ wp_db_host }}" }
+      become: yes
